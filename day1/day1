@@ -1,0 +1,81 @@
+# 📅 Week 12 - Day 1  
+## 🔹 Problem: Flatten Binary Tree to Linked List (LeetCode 114)
+
+### 🧠 Problem Statement
+Given the root of a binary tree, flatten the tree into a "linked list":
+
+- The linked list should use the same TreeNode structure.
+- The right child pointer points to the next node.
+- The left child pointer should always be NULL.
+- The order should follow **preorder traversal (Root → Left → Right)**.
+
+---
+
+### 🔗 Problem Link
+https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+
+---
+
+### 💡 Approach
+
+We use **Modified Preorder Traversal**:
+
+- Recursively flatten left and right subtrees.
+- Store left and right subtree.
+- Attach left subtree to right.
+- Move to end of new right subtree and attach original right subtree.
+
+---
+
+### ⚙️ Algorithm
+
+1. If root is NULL → return  
+2. Recursively flatten left subtree  
+3. Recursively flatten right subtree  
+4. Store:
+   - left subtree
+   - right subtree  
+5. Set:
+   - root->left = NULL  
+   - root->right = left subtree  
+6. Traverse to end of new right subtree  
+7. Attach original right subtree  
+
+---
+
+### ⏱️ Complexity
+
+- Time Complexity: `O(N)`  
+- Space Complexity: `O(H)` (recursion stack)
+
+---
+
+### 🧾 Code
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* NextRight = NULL; //last visited root
+    void flatten(TreeNode* root) {
+        if(root==NULL) return;
+        //we are traversing reversal of pre order 
+        flatten(root->right);
+        flatten(root->left);
+
+        root->left = NULL;
+        root->right = NextRight;
+        NextRight = root;
+
+    }
+};
