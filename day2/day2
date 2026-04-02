@@ -1,0 +1,185 @@
+# 📅 Week 12 - Day 2
+## 🌳 Binary Search Tree (BST)
+
+Today I learned and implemented the core operations of a Binary Search Tree (BST):
+
+### 📌 Topics Covered
+- BST Implementation
+- Searching in BST
+- Deletion in BST
+
+---
+
+## 🧠 Key Concepts
+
+### 🔹 What is a BST?
+A Binary Search Tree is a binary tree where:
+- Left subtree contains nodes with values **less than root**
+- Right subtree contains nodes with values **greater than root**
+
+---
+
+### 🔍 Searching in BST
+- Start from root
+- If value is smaller → go left
+- If value is larger → go right
+- Time Complexity: **O(log n)** (average)
+
+---
+
+### ❌ Deletion in BST
+There are 3 cases:
+1. **Leaf Node** → Simply delete
+2. **One Child** → Replace node with its child
+3. **Two Children** → Replace with inorder successor (minimum in right subtree)
+
+---
+
+## 💻 Code Implementation
+- BST Creation
+- Search Function
+- Delete Node Function
+
+---
+
+## ⏱️ Time Complexity
+| Operation | Average | Worst |
+|----------|--------|-------|
+| Search   | O(log n) | O(n) |
+| Insert   | O(log n) | O(n) |
+| Delete   | O(log n) | O(n) |
+
+---
+
+## 🚀 Learnings
+- Understood recursive tree operations
+- Learned how deletion works in multiple cases
+- Strengthened problem-solving in trees
+
+---
+
+## 📌 Practice Next
+- LeetCode 700 (Search in BST)
+- LeetCode 450 (Delete Node in BST)
+
+  #include <bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val)
+    {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+Node* insert(Node* root,int val){
+if(root == NULL){
+    return new Node(val);
+}
+
+if(val<root->data){
+    root->left = insert(root->left,val);
+}
+else{
+    root->right = insert(root->right,val);
+}
+return root;
+}
+
+// creation of binary search tree
+Node *buildBST(vector<int> arr)
+{
+  Node* root = NULL;
+  for(int val:arr){
+    root = insert(root,val);
+  }
+  return root;
+   
+}
+
+void inorder(Node* root){
+    if(root==NULL){
+        return;
+    }
+    inorder(root->left);
+    cout<<root->data<<" ";
+    inorder(root->right);
+}
+
+//searching a val inside bst
+bool search(Node* root,int key){
+    if(root==NULL){
+        return false;
+    }
+    if(root->data==key){
+        return true;
+    }
+    if(root->data>key){
+        return search(root->left,key);
+    }
+    else{
+        return search(root->right,key);
+    }
+
+}
+
+
+//delting Node
+
+Node* getInorderSuccessor(Node* root){
+    while(root!=NULL && root->left!=NULL){
+        root = root->left;
+    }
+    return root;
+}
+
+Node* delNode(Node* root,int key){
+    if(root==NULL){
+        return NULL;
+    }
+
+    if(key<root->data){
+        root->left = delNode(root->left,key);
+    }
+    else if(key>root->data){
+        root->right = delNode(root->right,key);
+    }else{
+        // key == root
+        if(root->left == NULL){
+            Node* temp = root->right;
+            delete root;
+            return temp;
+        }
+        else if(root->right == NULL){
+            Node* temp = root->left;
+            delete root;
+            return temp;
+        }
+        else{// 2 children
+            Node* IS = getInorderSuccessor(root->right);
+            root->data = IS->data;
+            root->right = delNode(root->right,IS->data);
+
+        }
+        
+    }
+    return root;
+}
+
+
+int main()
+{
+    vector<int> arr = {3,2,1,5,6,4};
+    Node* root = buildBST(arr);
+    inorder(root);
+    cout<<endl;
+    cout<<search(root,6)<<endl;
+    return 0;
+}
