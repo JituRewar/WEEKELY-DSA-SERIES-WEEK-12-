@@ -1,0 +1,54 @@
+# 📅 Week 12 - Day 4
+## 🔍 LeetCode 98: Validate Binary Search Tree
+
+### 🧠 Problem Statement
+Given the root of a binary tree, determine if it is a valid Binary Search Tree (BST).
+
+A valid BST must satisfy:
+- Left subtree of a node contains only nodes with values **less than** the node's value.
+- Right subtree of a node contains only nodes with values **greater than** the node's value.
+- Both left and right subtrees must also be BSTs.
+
+---
+
+### 🚀 Approach (Using Range Validation)
+
+We use recursion and pass a valid range for each node:
+- Initially, range is (-∞, +∞)
+- For left child → range becomes (min, root->val)
+- For right child → range becomes (root->val, max)
+
+If any node violates this range → Not a BST ❌
+
+---
+
+### ⏱️ Time Complexity
+- **O(n)** → Visit each node once
+
+### 💾 Space Complexity
+- **O(h)** → Recursion stack (h = height of tree)
+
+---
+
+### ✅ Key Concepts
+- Binary Search Tree Property
+- Recursion
+- Tree Traversal
+- Range Checking
+
+---
+
+### 📌 Exampleclass Solution {
+public:
+    bool helper(TreeNode* root,TreeNode* min,TreeNode* max){
+        if(root == NULL) return true;
+
+        if(min!=NULL && root->val <= min->val) return false;
+        if(max!=NULL && root->val >= max->val) return false;
+
+        return helper(root->left,min,root) && helper(root->right,root,max);
+    }
+    bool isValidBST(TreeNode* root) {
+        return helper(root,NULL,NULL);
+    }
+};
