@@ -1,0 +1,65 @@
+# 📅 Week 12 - Day 5
+## 🔍 LeetCode 783: Minimum Distance Between BST Nodes
+
+### 🧠 Problem Statement
+Given the root of a Binary Search Tree (BST), return the minimum difference between the values of any two different nodes.
+
+---
+
+### 🚀 Approach (Inorder Traversal - Optimal)
+
+👉 Key Insight:
+- Inorder traversal of a BST gives **sorted order**
+- Minimum difference will always be between **adjacent elements**
+
+### Steps:
+1. Perform inorder traversal
+2. Track previous node value
+3. Compute difference: `current - previous`
+4. Update minimum difference
+
+---
+
+### ⏱️ Time Complexity
+- **O(n)** → Visit all nodes once
+
+### 💾 Space Complexity
+- **O(h)** → Recursion stack
+
+---
+
+### ✅ Key Concepts
+- Binary Search Tree
+- Inorder Traversal
+- Greedy (adjacent comparison)
+
+---class Solution {
+public:
+    TreeNode* prev = NULL;
+    int ans = INT_MAX;
+    int minDiffInBST(TreeNode* root) {
+        if(root==NULL){
+            return INT_MAX;
+        }
+        //traversing inorder form
+        //left 
+        if(root->left){
+            int leftMin = minDiffInBST(root->left);
+            ans = min(ans,leftMin);
+        }
+        //root->data or ans
+        if(prev!=NULL){
+            ans = min(ans,root->val-prev->val);
+        }
+        prev = root;
+        //right
+        if(root->right){
+            int rightMin = minDiffInBST(root->right);
+            ans = min(ans,rightMin);
+        }
+
+        return ans;
+    }
+};
+
+### 📌 Example
