@@ -1,0 +1,48 @@
+lletcode 450
+  delete a node from BST
+
+  class Solution {
+public:
+    TreeNode* inorderSuccessor(TreeNode* root){
+        while(root!=NULL && root->left!=NULL){
+            root = root->left;
+        }
+        return root;
+    }
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if(root == NULL){
+            return NULL;
+        }
+
+        //left
+        if( key < root->val){
+           root->left = deleteNode(root->left,key); 
+        }
+        //right
+        else if(key > root->val){
+            root->right = deleteNode(root->right,key);
+        }
+        //root->val == key
+        else{
+            //one children condition
+            if(root->left==NULL){
+                TreeNode* temp = root->right;
+                delete(root);
+                return temp;
+            }
+            else if(root->right==NULL){
+                TreeNode* temp = root->left;
+                delete(root);
+                return temp;
+            }
+
+            //2 children condition
+            else{
+                TreeNode* IS = inorderSuccessor(root->right);
+                root->val = IS->val;
+                root->right = deleteNode(root->right,IS->val);    
+            }
+        }
+        return root;
+    }
+};
