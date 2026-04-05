@@ -1,0 +1,33 @@
+leetcode 230 
+  kth smallest elemeent in bst
+
+  class Solution {
+public:
+    int order = 1;
+    int kthSmallest(TreeNode* root, int k) {
+        if(root==NULL){
+            return -1;
+        }
+        //left side
+        if(root->left){
+            int leftans = kthSmallest(root->left,k);
+            if(leftans!=-1){
+                return leftans;
+            }
+        }
+        //root val
+        if(order == k){
+            return root->val;
+        }
+        order+=1;
+
+        //right
+       if(root->right){
+         int rightans = kthSmallest(root->right,k);
+         if(rightans!=-1){
+            return rightans;
+            }
+        }
+        return -1;
+    }
+};
